@@ -1,0 +1,40 @@
+Azure Container Registry:
+
+Setup admin access via Settings > Access Keys > check 'Admin User':
+>> az login OR
+>> az acr login --name testregistry
+
+Docker:
+//login with access keys and push to registry
+>> docker login testregistry.azurecr.io -u testregistry -p <pass key>
+>> docker tag todoapiimage:latest testregistry.azurecr.io/todoapiimage:v1
+>> docker push testregistry.azurecr.io/todoapiimage:v1
+
+>> docker push testdevcontainerregistry.azurecr.io/mcr.microsoft.com/dotnet/samples:aspnetapp
+>> docker tag todoapiimage:latest testdevcontainerregistry.azurecr.io/todoapiimage:v1
+>> docker push testdevcontainerregistry.azurecr.io/todoapiimage:v1
+
+In Azure CLI:
+alias k='kubectl'
+
+kubectl run wintest --image testdevacrdev.azurecr.io/provapi:v2 --overrides='{"apiversion": "v1", "spec": {"nodeSelector": { "kubernetes.io/os": "windows" }}}'
+kubectl run linuxtest --image testdevacrdev.azurecr.io/provapi:v3 --overrides='{"apiversion": "v1", "spec": {"nodeSelector": { "kubernetes.io/os": "linux" }}}'
+
+--to get into windows pods
+>> kubectl exec -it <podname> cmd.exe
+
+>> type file.txt
+
+--get images with resource group
+az image list --resource-group <myresourcegroup>
+az image list --resource-group testdev-Container_dev-rg
+
+kubectl get pod
+kubectl describe pod
+
+--command to login to linux pod
+kubectl exec -it linuxtest /bin/bash
+
+--delete deployments
+kubectl get deployments
+kubectl delete deployment <deployment_name>

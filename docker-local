@@ -1,0 +1,30 @@
+Commands to get docker container run locally:
+cd "D:\works\TodoApi"
+docker build -t dockerfile .
+docker build -t todoapiimage -f Dockerfile .
+docker run --rm -it -p 8000:80 -e ASPNETCORE_URLS="http://+" -e ASPNETCORE_HTTPS_PORT=8001 todoapiimage:latest
+docker run --rm -it -p 8000:80 -e ASPNETCORE_URLS="http://+" testregistry.azurecr.io/todoapiimage:v1
+docker run --rm -it -p 8000:80 -p 8001:443 -e ASPNETCORE_URLS="https://+;http://+" -e ASPNETCORE_HTTPS_PORT=8001 -e ASPNETCORE_Kestrel__Certificates__Default__Password="12345" -e ASPNETCORE_Kestrel__Certificates__Default__Path=\https\TodoApi.pfx -v D:\works\TodoApi\https:C:\https\ --user ContainerAdministrator mcr.microsoft.com/dotnet/samples:aspnetapp
+
+Create local cert for development:
+dotnet dev-certs https -ep "D:\Certs\docker\aspnetapp.pfx" -p <cert password>
+dotnet dev-certs https --trust
+
+pull sample app from mcr:
+docker pull mcr.microsoft.com/dotnet/samples:aspnetapp
+
+[windows container]
+docker run --rm -it -p 8000:80 -p 8001:443 -e ASPNETCORE_URLS="https://+;http://+" -e ASPNETCORE_HTTPS_PORT=8001 -e ASPNETCORE_Kestrel__Certificates__Default__Password="<password>" -e ASPNETCORE_Kestrel__Certificates__Default__Path=\https\aspnetapp.pfx -v D:\samples\aspnetapp\https:C:\https\ --user ContainerAdministrator mcr.microsoft.com/dotnet/samples:aspnetapp
+
+
+[linux container]
+docker run --rm -it -p 8000:80 -p 8001:443 -e ASPNETCORE_URLS="https://+;http://+" -e ASPNETCORE_HTTPS_PORT=8001 -e ASPNETCORE_Kestrel__Certificates__Default__Password="<password>" -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx -v D:\samples\aspnetapp\https:/https/ mcr.microsoft.com/dotnet/samples:aspnetapp
+
+docker network ls
+
+Reference articles:
+Docker on windows urls:
+https://computingforgeeks.com/how-to-run-docker-containers-on-windows-server-2019/#google_vignette
+https://4sysops.com/archives/install-docker-on-windows-server-2019/
+
+https://www.makeuseof.com/windows-side-by-side-configuration-incorrect/#:~:text=Run%20the%20Program%20Compatibility%20Troubleshooter,help%20you%20fix%20the%20error.
